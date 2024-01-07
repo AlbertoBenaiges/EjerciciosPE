@@ -12,9 +12,10 @@ class Circle:                       # define a class
             * self.radius           # trailing \ continues the expression on the next line
 
 for i in range(1, 10):
-    if (i & 1) == 0:
+    if (i & 1) == 1:
         continue
     circle = Circle(i)                  # create an instance
     print("A circle with radius {0} has area {1:0.2f}".format(
         i, circle.get_area()            # `print` writes output to the console
     ))
+
