@@ -1,14 +1,13 @@
 import random
-import datetime
 
-def _generate_parent(length,geneSet):
+def _generate_parent(length, geneSet):
     genes = []
     while len(genes) < length:
         sampleSize = min(length - len(genes), len(geneSet))
         genes.extend(random.sample(geneSet, sampleSize))
     return ''.join(genes)
 
-def _mutate(parent,geneSet):
+def _mutate(parent, geneSet):
     index = random.randrange(0, len(parent))
     childGenes = list(parent)
     newGene, alternate = random.sample(geneSet, 2)
@@ -19,22 +18,25 @@ def _mutate(parent,geneSet):
     # print('MUTATE!\n')
     return ''.join(childGenes)
 
-def get_best(get_fitness, targetLen, optimalFitness, geneSet, display,target):
+def get_best(get_fitness, targetLen, optimalFitness, geneSet, display):
+    
     random.seed()
-    startTime = datetime.datetime.now()
-    bestParent = _generate_parent(len(target))
+    bestParent = _generate_parent(targetLen, geneSet)
     bestFitness = get_fitness(bestParent)
     display(bestParent)
-
+    if bestFitness >= optimalFitness:
+        return bestParent
+    
     while True:
-        child = _mutate(bestParent)
-        # print("Mutacion: ",child)
+        child = _mutate(bestParent, geneSet)
         childFitness = get_fitness(child)
+        # print("Mutacion: ",child)
+
         if bestFitness >= childFitness:
             # print("Sigue probando")
             continue
         display(child)
-        if childFitness >= len(bestParent):
-            break
+        if childFitness >= optimalFitness:
+            return child
         bestFitness = childFitness
         bestParent = child
